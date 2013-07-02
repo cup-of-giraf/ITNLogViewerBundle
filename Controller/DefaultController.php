@@ -15,7 +15,7 @@ class DefaultController extends Controller
      * @Route("/{env}")
      * @Template()
      */
-    public function indexAction( $env)
+    public function indexAction($env)
     {
         $logs_dir = $this->container->getParameter('kernel.logs_dir');
         $logfile = $logs_dir . DIRECTORY_SEPARATOR . $env . '.log';
@@ -25,7 +25,10 @@ class DefaultController extends Controller
         }
 
         return array(
-            'tac' => new Tac($logfile)
+            'tac'   => new Tac($logfile),
+            'env'   => $env,
+            'file'  => $logfile,
+            'lines' => (int) $this->getRequest()->query->get('lines', 1000),
         );
     }
 }

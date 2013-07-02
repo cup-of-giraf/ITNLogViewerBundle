@@ -1,5 +1,15 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Logs for the "{{ env }}" environment</title>
+</head>
+<body>
+<h1>Logs for the "{{ env }}" environment ({{ file }})</h1>
 <pre>
-    {% for line in tac.tac(1000) %}
-        {{line}}
-    {% endfor %}
+{% for line in tac.tac(lines) %}
+{{line}}
+{% endfor %}
 </pre>
+</body>
+</html>
