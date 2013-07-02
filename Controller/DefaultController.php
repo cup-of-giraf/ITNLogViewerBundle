@@ -2,9 +2,12 @@
 
 namespace ITN\Bundle\LogViewerBundle\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+
+use Tac\Tac;
+
 
 class DefaultController extends Controller
 {
@@ -14,15 +17,15 @@ class DefaultController extends Controller
      */
     public function indexAction( $env)
     {
-        $root_dir = $this->get('kernel')->getRootDir();
-        $logfile = $root_dir. DIRECTORY_SEPARATOR . 'logs' . DIRECTORY_SEPARATOR . $env . '.log';
+        $logs_dir = $this->container->getParameter('kernel.logs_dir');
+        $logfile = $logs_dir . DIRECTORY_SEPARATOR . $env . '.log';
 
-        if( file_exists($logfile) == false ) {
-            throw new \Symfony\Component\HttpKernel\Exception\NotFoundHttpException( sprintf('log file not found %s', $logfile));
+        if (!file_exists($logfile)) {
+            throw $this->createNotFoundException(sprintf('log file not found %s', $logfile));
         }
 
-        $tac = new \Tac\Tac($logfile);
-
-        return array('tac' => $tac);
+        return array(
+            'tac' => new Tac($logfile)
+        );
     }
 }
